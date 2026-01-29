@@ -1,35 +1,37 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
-
 import TasksList from './components/TaskList';
+
+const API = process.env.REACT_APP_API_URL;
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
-  const API_BASE = process.env.REACT_APP_API_URL;
-
   const getTasks = useCallback(() => {
-    fetch(`${API_BASE}/api/tasks`)
+    fetch(`${API}/api/tasks`)
       .then((res) => res.json())
-      .then(setTasks);
-  }, [API_BASE]);
+      .then(setTasks)
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     getTasks();
-  }, [getTasks]);
+  }, []);
 
   const clickAddTask = (event) => {
     event.preventDefault();
 
-    fetch(`${API_BASE}/api/tasks/add`, {
-      method: 'post',
+    fetch(`${API}/api/tasks/add`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: newTaskTitle }),
-    }).then(() => {
-      setNewTaskTitle('');
-      getTasks();
-    });
+    })
+      .then(() => {
+        setNewTaskTitle('');
+        getTasks();
+      })
+      .catch(console.error);
   };
 
   return (
@@ -53,4 +55,5 @@ const App = () => {
 };
 
 export default App;
+
 
