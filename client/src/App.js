@@ -7,20 +7,22 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
+  const API_BASE = process.env.REACT_APP_API_URL;
+
   const getTasks = useCallback(() => {
-    fetch('/api/tasks')
-      .then(res => res.json())
+    fetch(`${API_BASE}/api/tasks`)
+      .then((res) => res.json())
       .then(setTasks);
-  });
+  }, [API_BASE]);
 
   useEffect(() => {
     getTasks();
-  }, []);
+  }, [getTasks]);
 
-  const clickAddTask = event => {
+  const clickAddTask = (event) => {
     event.preventDefault();
 
-    fetch('/api/tasks/add', {
+    fetch(`${API_BASE}/api/tasks/add`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: newTaskTitle }),
@@ -42,7 +44,7 @@ const App = () => {
           size="30"
           placeholder="New Task"
           value={newTaskTitle}
-          onChange={event => setNewTaskTitle(event.target.value)}
+          onChange={(event) => setNewTaskTitle(event.target.value)}
         />
         <input className="btn-primary" type="submit" value="Add" />
       </form>
@@ -51,3 +53,4 @@ const App = () => {
 };
 
 export default App;
+
