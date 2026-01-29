@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/simple-mern');
+const mongoURI = process.env.MONGO_URI;
+
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 module.exports = mongoose;
+
